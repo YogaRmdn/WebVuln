@@ -1,0 +1,46 @@
+{% extends 'lab/base.html' %}
+{% block title %}XSS Stored{% endblock %}
+{% block content %}
+<h1>Stored XSS - Comments</h1>
+<div class="card">
+    <div class="vuln-tag">Vulnerability: Stored Cross-Site Scripting in comments</div>
+    <div class="post-selector">
+        <label>Select post:</label>
+        {% for p in posts %}
+        <a href="{% url 'xss_stored' p.id %}" class="btn">{{ p.title }}</a>
+        {% endfor %}
+    </div>
+    <h3>{{ post.title }}</h3>
+    <p class="muted" style="margin-bottom:1rem">By {{ post.author.username }}</p>
+    <p>{{ post.content }}</p>
+</div>
+<div class="card">
+    <h3>Add Comment</h3>
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            <label>Name:</label>
+            <input type="text" name="author_name" placeholder="Your name">
+        </div>
+        <div class="form-group">
+            <label>Comment:</label>
+            <textarea name="content" placeholder="Write your comment..."></textarea>
+        </div>
+        <div class="form-actions">
+            <button type="submit">Submit</button>
+        </div>
+    </form>
+</div>
+<div class="card">
+    <h3>Comments ({{ comments|length }})</h3>
+    {% for c in comments %}
+    <div class="comment-item">
+        <strong>{{ c.author_name }}</strong>
+        <p>{{ c.content|safe }}</p>
+        <small>{{ c.created_at }}</small>
+    </div>
+    {% empty %}
+    <p class="empty-state">No comments yet.</p>
+    {% endfor %}
+</div>
+{% endblock %}

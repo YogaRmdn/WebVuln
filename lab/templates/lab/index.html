@@ -1,0 +1,97 @@
+{% extends 'lab/base.html' %}
+{% block title %}Home{% endblock %}
+{% block content %}
+<h1>WebVuln Lab</h1>
+<p class="section-desc">A deliberately vulnerable Django application for security testing. Use this lab to practice finding and exploiting web vulnerabilities.</p>
+
+<div class="grid">
+    <div class="card">
+        <div class="vuln-tag">SQL Injection</div>
+        <h3>SQL Injection</h3>
+        <p>Login bypass, search, and product category injection</p>
+        <div class="btn-group">
+            <a href="{% url 'sqli_login' %}" class="btn">Login Bypass</a>
+            <a href="{% url 'sqli_search' %}" class="btn">Search</a>
+            <a href="{% url 'sqli_product' %}" class="btn">Products</a>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="vuln-tag">XSS</div>
+        <h3>Cross-Site Scripting</h3>
+        <p>Reflected, Stored, and DOM-based XSS</p>
+        <div class="btn-group">
+            <a href="{% url 'xss_reflected' %}" class="btn">Reflected</a>
+            <a href="{% url 'xss_stored' %}" class="btn">Stored</a>
+            <a href="{% url 'xss_dom' %}" class="btn">DOM-based</a>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="vuln-tag">File Upload</div>
+        <h3>Unrestricted File Upload</h3>
+        <p>Upload any file type without validation</p>
+        <div class="btn-group">
+            <a href="{% url 'upload_file' %}" class="btn">Upload</a>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="vuln-tag">Command Injection</div>
+        <h3>Command Injection</h3>
+        <p>Ping functionality vulnerable to command injection</p>
+        <div class="btn-group">
+            <a href="{% url 'cmd_injection' %}" class="btn">Test</a>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="vuln-tag">Path Traversal</div>
+        <h3>Path Traversal</h3>
+        <p>Read arbitrary files using directory traversal</p>
+        <div class="btn-group">
+            <a href="{% url 'path_traversal' %}" class="btn">Read Files</a>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="vuln-tag">Open Redirect</div>
+        <h3>Open Redirect</h3>
+        <p>Unvalidated redirect parameter</p>
+        <div class="btn-group">
+            <a href="{% url 'open_redirect' %}" class="btn">Redirect</a>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="vuln-tag">CSRF</div>
+        <h3>CSRF</h3>
+        <p>No CSRF protection on money transfer</p>
+        <div class="btn-group">
+            <a href="{% url 'csrf_transfer' %}" class="btn">Transfer</a>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="vuln-tag">Info Disclosure</div>
+        <h3>Information Disclosure</h3>
+        <p>Debug endpoints and sensitive data exposure</p>
+        <div class="btn-group">
+            <a href="{% url 'debug_info' %}" class="btn">Debug</a>
+            <a href="{% url 'robots' %}" class="btn">robots.txt</a>
+        </div>
+    </div>
+</div>
+
+<h2>Recent Blog Posts</h2>
+{% for post in posts %}
+<div class="card">
+    <h3>{{ post.title }}</h3>
+    <p class="muted" style="margin-bottom:0.75rem">By {{ post.author.username }} | {{ post.created_at }}</p>
+    <p>{{ post.content|truncatewords:50 }}</p>
+    <div class="btn-group"><a href="{% url 'xss_stored' post.id %}" class="btn">View Comments</a></div>
+</div>
+{% empty %}
+<p class="empty-state">No blog posts yet.</p>
+{% endfor %}
+{% endblock %}

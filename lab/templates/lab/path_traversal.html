@@ -1,0 +1,29 @@
+{% extends 'lab/base.html' %}
+{% block title %}Path Traversal{% endblock %}
+{% block content %}
+<h1>Path Traversal</h1>
+<div class="card">
+    <div class="vuln-tag">Vulnerability: Path/Directory Traversal</div>
+    <p class="section-desc">Read files from the server. The filename parameter is not sanitized.</p>
+    <form method="get">
+        <div class="form-group">
+            <label>Filename:</label>
+            <input type="text" name="file" placeholder="readme.txt" value="{{ filename }}">
+        </div>
+        <div class="form-actions">
+            <button type="submit">Read</button>
+        </div>
+    </form>
+    <p class="hint-text" style="margin-top:1.25rem">Try: <code>readme.txt</code>, <code>secret.txt</code></p>
+</div>
+{% if content %}
+<div class="card">
+    <h3>File: {{ filename }}</h3>
+    <pre>{{ content }}</pre>
+</div>
+{% endif %}
+<div class="card">
+    <h3>Hint</h3>
+    <p class="hint-text">Try: <code>../../../../../../etc/passwd</code> or <code>../../../../db.sqlite3</code></p>
+</div>
+{% endblock %}

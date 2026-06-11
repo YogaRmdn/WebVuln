@@ -1,0 +1,22 @@
+{% extends 'lab/base.html' %}
+{% block title %}Open Redirect{% endblock %}
+{% block content %}
+<h1>Open Redirect</h1>
+<div class="card">
+    <div class="vuln-tag">Vulnerability: Unvalidated redirect</div>
+    <p class="section-desc">The redirect endpoint accepts any URL and redirects without validation.</p>
+    <form method="get">
+        <div class="form-group">
+            <label>Redirect URL:</label>
+            <input type="text" name="url" placeholder="https://example.com">
+        </div>
+        <div class="form-actions">
+            <button type="submit">Go</button>
+        </div>
+    </form>
+</div>
+<div class="card">
+    <h3>Example</h3>
+    <p class="hint-text">Try: <code>{% url 'open_redirect' %}?url=https://google.com</code></p>
+</div>
+{% endblock %}

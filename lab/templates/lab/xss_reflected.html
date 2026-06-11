@@ -1,0 +1,25 @@
+{% extends 'lab/base.html' %}
+{% block title %}XSS Reflected{% endblock %}
+{% block content %}
+<h1>Reflected XSS</h1>
+<div class="card">
+    <div class="vuln-tag">Vulnerability: Reflected Cross-Site Scripting</div>
+    <p class="section-desc">The message parameter is rendered without sanitization.</p>
+    <form method="get">
+        <div class="form-group">
+            <label>Enter a message:</label>
+            <input type="text" name="msg" placeholder="Hello!">
+        </div>
+        <div class="form-actions">
+            <button type="submit">Submit</button>
+        </div>
+    </form>
+    {% if message %}
+    <div class="output-box">{{ message|safe }}</div>
+    {% endif %}
+</div>
+<div class="card">
+    <h3>Hint</h3>
+    <p class="hint-text">Try: <code>&lt;script&gt;alert('XSS')&lt;/script&gt;</code></p>
+</div>
+{% endblock %}

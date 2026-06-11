@@ -1,0 +1,22 @@
+{% extends 'lab/base.html' %}
+{% block title %}Feedback{% endblock %}
+{% block content %}
+<h1>Feedback</h1>
+<div class="card">
+    <div class="vuln-tag">Vulnerability: Information Disclosure / XSS</div>
+    <p class="section-desc">Submit your feedback. The message is rendered with safe filter, allowing XSS.</p>
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            <label>Message:</label>
+            <textarea name="message" placeholder="Your feedback..."></textarea>
+        </div>
+        <div class="form-actions">
+            <button type="submit">Submit</button>
+        </div>
+    </form>
+    {% if message %}
+    <div class="alert">{{ message|safe }}</div>
+    {% endif %}
+</div>
+{% endblock %}

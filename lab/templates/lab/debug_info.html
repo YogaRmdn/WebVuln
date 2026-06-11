@@ -1,0 +1,14 @@
+{% extends 'lab/base.html' %}
+{% block title %}Debug Info{% endblock %}
+{% block content %}
+<h1>Debug Information</h1>
+<div class="card">
+    <div class="vuln-tag">Vulnerability: Sensitive Information Exposure</div>
+    <p class="section-desc">This endpoint exposes sensitive configuration details.</p>
+    <table>
+        {% for key, value in info.items %}
+        <tr><th>{{ key }}</th><td><code>{{ value }}</code></td></tr>
+        {% endfor %}
+    </table>
+</div>
+{% endblock %}

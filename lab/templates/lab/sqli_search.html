@@ -1,0 +1,33 @@
+{% extends 'lab/base.html' %}
+{% block title %}SQLi Search{% endblock %}
+{% block content %}
+<h1>SQL Injection - User Search</h1>
+<div class="card">
+    <div class="vuln-tag">Vulnerability: SQL Injection in LIKE query</div>
+    <p class="section-desc">Search users. The query parameter is directly concatenated into a SQL LIKE clause.</p>
+    <form method="get">
+        <div class="form-group">
+            <label>Search users:</label>
+            <input type="text" name="q" placeholder="admin" value="{{ query }}">
+        </div>
+        <div class="form-actions">
+            <button type="submit">Search</button>
+        </div>
+    </form>
+    {% if error %}
+    <div class="alert">Error: {{ error }}</div>
+    {% endif %}
+    {% if results %}
+    <table>
+        <tr><th>ID</th><th>Username</th><th>Email</th></tr>
+        {% for row in results %}
+        <tr><td>{{ row.0 }}</td><td>{{ row.1 }}</td><td>{{ row.2 }}</td></tr>
+        {% endfor %}
+    </table>
+    {% endif %}
+</div>
+<div class="card">
+    <h3>Hint</h3>
+    <p class="hint-text">Try: <code>' UNION SELECT id, username, email FROM auth_user --</code></p>
+</div>
+{% endblock %}

@@ -1,0 +1,27 @@
+{% extends 'lab/base.html' %}
+{% block title %}Command Injection{% endblock %}
+{% block content %}
+<h1>Command Injection</h1>
+<div class="card">
+    <div class="vuln-tag">Vulnerability: OS Command Injection</div>
+    <p class="section-desc">Ping a target host. The input is passed directly to the shell.</p>
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            <label>Target IP/Hostname:</label>
+            <input type="text" name="target" placeholder="8.8.8.8" value="{{ command }}">
+        </div>
+        <div class="form-actions">
+            <button type="submit">Ping</button>
+        </div>
+    </form>
+    {% if output %}
+    <h3>Output:</h3>
+    <div class="output-box">{{ output }}</div>
+    {% endif %}
+</div>
+<div class="card">
+    <h3>Hint</h3>
+    <p class="hint-text">Try: <code>8.8.8.8; ls</code> or <code>8.8.8.8 | cat /etc/passwd</code></p>
+</div>
+{% endblock %}

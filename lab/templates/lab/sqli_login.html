@@ -1,0 +1,30 @@
+{% extends 'lab/base.html' %}
+{% block title %}SQLi Login Bypass{% endblock %}
+{% block content %}
+<h1>SQL Injection - Login Bypass</h1>
+<div class="card">
+    <div class="vuln-tag">Vulnerability: SQL Injection in login query</div>
+    <p class="section-desc">Try bypassing authentication with SQL injection. The query is built by concatenating user input directly.</p>
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            <label>Username:</label>
+            <input type="text" name="username" placeholder="admin' OR '1'='1">
+        </div>
+        <div class="form-group">
+            <label>Password:</label>
+            <input type="text" name="password" placeholder="' OR '1'='1">
+        </div>
+        <div class="form-actions">
+            <button type="submit">Login</button>
+        </div>
+    </form>
+    {% if error %}
+    <div class="alert">{{ error }}</div>
+    {% endif %}
+</div>
+<div class="card">
+    <h3>Hint</h3>
+    <p class="hint-text">Try: <code>admin' --</code> or <code>' OR 1=1 --</code></p>
+</div>
+{% endblock %}

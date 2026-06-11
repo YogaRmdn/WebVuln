@@ -1,0 +1,26 @@
+{% extends 'lab/base.html' %}
+{% block title %}SQLi Products{% endblock %}
+{% block content %}
+<h1>SQL Injection - Product Search</h1>
+<div class="card">
+    <div class="vuln-tag">Vulnerability: SQL Injection in category filter</div>
+    <p class="section-desc">Filter products by category. The category parameter is vulnerable to SQL injection.</p>
+    <form method="get">
+        <div class="form-group">
+            <label>Category:</label>
+            <input type="text" name="cat" placeholder="Electronics" value="{{ cat }}">
+        </div>
+        <div class="form-actions">
+            <button type="submit">Filter</button>
+        </div>
+    </form>
+    {% if products %}
+    <table>
+        <tr><th>ID</th><th>Name</th><th>Description</th><th>Price</th><th>Category</th></tr>
+        {% for p in products %}
+        <tr><td>{{ p.0 }}</td><td>{{ p.1 }}</td><td>{{ p.2 }}</td><td>{{ p.3 }}</td><td>{{ p.4 }}</td></tr>
+        {% endfor %}
+    </table>
+    {% endif %}
+</div>
+{% endblock %}

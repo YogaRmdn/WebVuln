@@ -1,0 +1,40 @@
+{% extends 'lab/base.html' %}
+{% block title %}XSS DOM-based{% endblock %}
+{% block content %}
+<h1>DOM-based XSS</h1>
+<div class="card">
+    <div class="vuln-tag">Vulnerability: DOM-based Cross-Site Scripting</div>
+    <p class="section-desc">The page reads from window.location.hash and writes to innerHTML without sanitization.</p>
+    <form onsubmit="return false;">
+        <div class="form-group">
+            <label>Enter a message (will appear in URL hash):</label>
+            <input type="text" id="msgInput" placeholder="#alert('DOM XSS')">
+        </div>
+        <div class="form-actions">
+            <button onclick="updateMessage()">Show Message</button>
+        </div>
+    </form>
+    <div id="output" class="output-box">
+        Waiting for input...
+    </div>
+</div>
+
+<script>
+    function updateMessage() {
+        var msg = document.getElementById('msgInput').value;
+        window.location.hash = msg;
+        document.getElementById('output').innerHTML = msg;
+    }
+
+    var hash = window.location.hash.substring(1);
+    if (hash) {
+        document.getElementById('output').innerHTML = hash;
+        document.getElementById('msgInput').value = hash;
+    }
+</script>
+
+<div class="card">
+    <h3>Hint</h3>
+    <p class="hint-text">Type: <code>&lt;img src=x onerror=alert(1)&gt;</code> and click Show Message</p>
+</div>
+{% endblock %}
