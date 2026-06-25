@@ -1,6 +1,6 @@
-# Weblow
+# WebVuln
 
-**Weblow** is a deliberately vulnerable Django web application designed for cybersecurity training and penetration testing practice. It provides a safe, legal environment to learn and practice exploiting common web vulnerabilities across multiple categories.
+**WebVuln** is a deliberately vulnerable Django web application designed for cybersecurity training and penetration testing practice. It provides a safe, legal environment to learn and practice exploiting common web vulnerabilities across multiple categories.
 
 > **Warning:** This application contains intentional security flaws. Do **not** deploy it in a production environment or expose it to the public internet.
 
@@ -8,7 +8,7 @@
 
 ## Features
 
-Weblow includes **10+ vulnerability categories** with multiple scenarios per category:
+WebVuln includes **10+ vulnerability categories** with multiple scenarios per category:
 
 | Category | Endpoints | Description |
 |----------|-----------|-------------|
@@ -46,8 +46,8 @@ Weblow includes **10+ vulnerability categories** with multiple scenarios per cat
 
 ```bash
 # Clone the repository
-git clone https://github.com/YogaRmdn/Weblow.git
-cd Weblow
+git clone https://github.com/YogaRmdn/WebVuln.git
+cd WebVuln
 
 # Create and activate virtual environment
 python3 -m venv .venv
@@ -67,6 +67,12 @@ python manage.py runserver
 ```
 
 The application will be available at **http://127.0.0.1:8000**.
+
+### Quick Run
+
+```bash
+chmod +x run.sh && ./run.sh
+```
 
 ### Default Credentials
 
@@ -107,7 +113,7 @@ The application will be available at **http://127.0.0.1:8000**.
 ## Project Structure
 
 ```
-Weblow/
+WebVuln/
 ├── lab/                    # Main application with vulnerable endpoints
 │   ├── files/              # Sample files for path traversal lab
 │   ├── migrations/         # Django database migrations
@@ -125,6 +131,7 @@ Weblow/
 ├── media/                  # Uploaded files directory
 ├── manage.py               # Django management script
 ├── seed.py                 # Database seeder with sample data
+├── run.sh                  # Quick setup and run script
 ├── requirements.txt        # Python dependencies
 └── README.md               # This file
 ```
@@ -133,7 +140,7 @@ Weblow/
 
 ## Security Notes
 
-Weblow is an **educational tool** intended for:
+WebVuln is an **educational tool** intended for:
 
 - Security researchers and ethical hackers
 - Students learning web application security
