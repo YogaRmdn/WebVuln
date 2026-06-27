@@ -22,6 +22,7 @@ WebVuln includes **10+ vulnerability categories** with multiple scenarios per ca
 | **IDOR** | `/profile/<id>/` | Insecure Direct Object Reference on user profiles |
 | **CSRF** | `/transfer/` | Missing CSRF protection on fund transfer |
 | **Open Redirect** | `/redirect/` | Unvalidated redirect via `url` parameter |
+| **403 Bypass** | `/protected/`, `/protected/<id>/` | Bypass role-based access control on protected documents |
 | **Information Disclosure** | `/debug/`, `/robots.txt`, `/.well-known/security.txt` | Debug endpoint exposing configuration and secrets |
 
 ---
@@ -108,6 +109,10 @@ chmod +x run.sh && ./run.sh
 - The `/transfer/` endpoint processes state-changing requests without CSRF tokens
 - Craft a malicious page that submits the transfer form on behalf of an authenticated user
 
+### 403 Bypass
+- Access protected documents by manipulating headers (e.g., `X-Forwarded-For: 127.0.0.1`), HTTP methods, or URL variations
+- Exploit inconsistent access control checks to retrieve sensitive documents like network maps and credentials
+
 ---
 
 ## Project Structure
@@ -120,7 +125,7 @@ WebVuln/
 │   ├── templates/          # HTML templates
 │   ├── admin.py            # Admin configuration
 │   ├── forms.py            # Form definitions
-│   ├── models.py           # Database models (BlogPost, Comment, Product, UploadedFile)
+│   ├── models.py           # Database models (BlogPost, Comment, Product, UploadedFile, ProtectedDocument)
 │   ├── urls.py             # URL routing for all lab endpoints
 │   └── views.py            # View logic with intentional vulnerabilities
 ├── vulnapp/                # Django project configuration
