@@ -5,7 +5,7 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'vulnapp.settings')
 django.setup()
 
 from django.contrib.auth.models import User
-from lab.models import BlogPost, Comment, Product
+from lab.models import BlogPost, Comment, Product, ProtectedDocument
 
 
 def seed():
@@ -58,10 +58,41 @@ def seed():
         ]
         Product.objects.bulk_create(products)
 
+    # Create protected documents
+    if not ProtectedDocument.objects.exists():
+        docs = [
+            ProtectedDocument(
+                title='Internal Network Map',
+                content='192.168.1.0/24 — Office LAN\n10.0.0.0/8 — Internal Infrastructure\n172.16.0.0/12 — DMZ\n\nDNS Servers:\n  - 10.0.0.53 (Internal DNS)\n  - 8.8.8.8 (External Forwarder)\n\nDomain Controllers:\n  - DC01 (10.0.0.10)\n  - DC02 (10.0.0.11)',
+                category='Infrastructure',
+                required_role='admin',
+            ),
+            ProtectedDocument(
+                title='Database Credentials',
+                content='PostgreSQL Master Database\n  Host: db01.internal\n  Port: 5432\n  Database: prod_app\n  Username: db_admin\n  Password: S3cur3P@ssw0rd!\n\nRedis Cache\n  Host: redis01.internal\n  Port: 6379\n  Password: r3d1s_c4ch3_k3y',
+                category='Secrets',
+                required_role='admin',
+            ),
+            ProtectedDocument(
+                title='Employee Salary Records',
+                content='ID | Name | Position | Salary\n----------------------------------------\n001 | Admin User | CEO | $250,000\n002 | Alice Smith | Developer | $120,000\n003 | Bob Jones | Developer | $115,000\n004 | Charlie Brown | Security | $145,000\n005 | Diana Prince | DevOps | $130,000',
+                category='HR',
+                required_role='hr_admin',
+            ),
+            ProtectedDocument(
+                title='Incident Response Runbook',
+                content='== PHASE 1: IDENTIFICATION ==\n1. Monitor SIEM alerts\n2. Verify alert legitimacy\n3. Assign severity level\n\n== PHASE 2: CONTAINMENT ==\n1. Isolate affected systems\n2. Block malicious IPs\n3. Preserve forensic evidence\n\n== PHASE 3: ERADICATION ==\n1. Remove malware\n2. Patch vulnerabilities\n3. Rotate compromised credentials\n\n== PHASE 4: RECOVERY ==\n1. Restore from clean backups\n2. Monitor for re-infection\n3. Return to normal operations',
+                category='Security',
+                required_role='admin',
+            ),
+        ]
+        ProtectedDocument.objects.bulk_create(docs)
+
     print('Seed data created successfully!')
     print(f'  - {User.objects.count()} users')
     print(f'  - {BlogPost.objects.count()} blog posts')
     print(f'  - {Product.objects.count()} products')
+    print(f'  - {ProtectedDocument.objects.count()} protected documents')
     print()
     print('Users created:')
     print('  admin / admin123 (superuser)')

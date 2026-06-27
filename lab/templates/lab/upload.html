@@ -28,6 +28,7 @@
 
 <div class="card">
     <h3>Uploaded Files</h3>
+    <div class="table-wrapper">
     <table>
         <tr><th>File</th><th>Description</th><th>Date</th><th>Link</th></tr>
         {% for f in files %}
@@ -41,5 +42,6 @@
         <tr><td colspan="4" class="empty-state">No files uploaded yet.</td></tr>
         {% endfor %}
     </table>
+    </div>
 </div>
 {% endblock %}

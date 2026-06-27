@@ -10,7 +10,8 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0f0f1a; color: #e0e0e0; min-height: 100vh; display: flex; }
-        .sidebar { width: 260px; background: #1a1a2e; border-right: 2px solid #e94560; min-height: 100vh; padding: 1.5rem 0; position: fixed; left: 0; top: 0; overflow-y: auto; }
+        .sidebar { width: 260px; background: #1a1a2e; border-right: 2px solid #e94560; min-height: 100vh; padding: 1.5rem 0; position: fixed; left: 0; top: 0; overflow-y: auto; z-index: 100; transition: transform 0.3s ease; }
+
         .sidebar .brand { display: block; font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 1.1rem; color: #e94560; padding: 0 1.5rem 1.2rem; border-bottom: 1px solid #16213e; margin-bottom: 0.75rem; letter-spacing: -0.5px; }
         .sidebar .category { padding: 0.75rem 1.5rem 0.3rem; font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; text-transform: uppercase; letter-spacing: 2px; color: #e94560; }
         .sidebar a { display: block; color: #a0a0b0; text-decoration: none; padding: 0.55rem 1.5rem 0.55rem 2rem; font-size: 0.85rem; transition: all 0.2s; border-left: 3px solid transparent; }
@@ -19,6 +20,9 @@
         .sidebar .home-link { padding: 0.55rem 1.5rem; font-weight: 600; }
         .main { margin-left: 260px; flex: 1; padding: 3rem 2.5rem; max-width: calc(100% - 260px); }
         .container { max-width: 1100px; margin: 0 auto; }
+
+        .menu-toggle { display: none; position: fixed; top: 1rem; left: 1rem; z-index: 200; background: #1a1a2e; border: 1px solid #e94560; color: #e94560; width: 40px; height: 40px; border-radius: 6px; cursor: pointer; align-items: center; justify-content: center; font-size: 1.3rem; }
+        .sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 99; }
 
         h1 { color: #e94560; font-size: 2rem; margin-bottom: 0.5rem; font-weight: 700; letter-spacing: -0.5px; }
         h2 { color: #e94560; font-size: 1.5rem; margin: 2rem 0 1rem; font-weight: 600; letter-spacing: -0.3px; }
@@ -41,8 +45,10 @@
         .btn-group a.btn { padding: 0.6rem 1.2rem; font-size: 0.85rem; }
         .btn-group a.btn { color: #fff; }
 
-        table { width: 100%; border-collapse: collapse; margin: 1.25rem 0; }
-        th, td { padding: 0.85rem 0.75rem; text-align: left; border-bottom: 1px solid #16213e; }
+        .table-wrapper { overflow-x: auto; margin: 1.25rem 0; }
+        .table-wrapper table { margin: 0; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 0.85rem 0.75rem; text-align: left; border-bottom: 1px solid #16213e; white-space: nowrap; }
         th { color: #e94560; border-bottom: 2px solid #e94560; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.5px; }
         tr:hover { background: rgba(233, 69, 96, 0.04); }
 
@@ -84,10 +90,47 @@
         .post-selector { margin-bottom: 1.5rem; }
         .post-selector label { display: block; margin-bottom: 0.75rem; color: #c0c0d0; font-weight: 600; font-size: 0.9rem; }
         .post-selector .btn { margin: 0.25rem; padding: 0.4rem 0.8rem; font-size: 0.85rem; }
+
+        @media (max-width: 768px) {
+            body { flex-direction: column; }
+            .menu-toggle { display: flex; }
+            .sidebar .brand { text-align: center; }
+            .sidebar { transform: translateX(-100%); }
+            .sidebar.open { transform: translateX(0); }
+            .sidebar-overlay.open { display: block; }
+            .main { margin-left: 0; max-width: 100%; padding: 4.5rem 1rem 2rem; }
+            h1 { font-size: 1.5rem; text-align: center; }
+            h2 { font-size: 1.25rem; }
+            h3 { font-size: 1.05rem; }
+            .card { padding: 1.25rem; }
+            .grid { grid-template-columns: 1fr; gap: 1rem; }
+            th, td { padding: 0.6rem 0.5rem; font-size: 0.8rem; }
+            button, .btn { width: 100%; text-align: center; }
+            .btn-group { flex-direction: column; }
+            .btn-group a.btn { width: 100%; text-align: center; }
+            .post-selector .btn { width: auto; }
+            pre { font-size: 0.78rem; padding: 1rem; }
+            .comment-item { padding: 0.75rem; }
+        }
+
+        @media (max-width: 480px) {
+            .main { padding: 4rem 0.75rem 1.5rem; }
+            h1 { font-size: 1.3rem; }
+            .card { padding: 1rem; border-radius: 6px; }
+            input, textarea, select { padding: 0.6rem 0.75rem; font-size: 0.9rem; }
+            .table-wrapper { margin: 0.75rem 0; }
+            th, td { padding: 0.5rem 0.4rem; font-size: 0.75rem; }
+            .section-desc { font-size: 0.9rem; }
+            .grid { gap: 0.75rem; }
+            .alert { padding: 0.75rem 1rem; font-size: 0.9rem; }
+            .output-box { padding: 0.75rem; font-size: 0.8rem; }
+        }
     </style>
 </head>
 <body>
-    <div class="sidebar">
+    <button class="menu-toggle" onclick="toggleSidebar()" aria-label="Toggle menu">&#9776;</button>
+    <div class="sidebar-overlay" onclick="toggleSidebar()"></div>
+    <div class="sidebar" id="sidebar">
         <span class="brand">WebVuln Lab</span>
         <a href="{% url 'index' %}" class="home-link">Home</a>
         <div class="category">SQL Injection</div>
@@ -104,6 +147,7 @@
         <a href="{% url 'path_traversal' %}">Path Traversal</a>
         <a href="{% url 'open_redirect' %}">Open Redirect</a>
         <a href="{% url 'csrf_transfer' %}">CSRF</a>
+        <a href="{% url 'protected_index' %}">403 Bypass</a>
         <div class="category">Info</div>
         <a href="{% url 'feedback' %}">Feedback</a>
         <a href="{% url 'debug_info' %}">Debug</a>
@@ -113,5 +157,23 @@
             {% block content %}{% endblock %}
         </div>
     </div>
+    <script>
+        function toggleSidebar() {
+            var sidebar = document.getElementById('sidebar');
+            var overlay = document.querySelector('.sidebar-overlay');
+            var btn = document.querySelector('.menu-toggle');
+            sidebar.classList.toggle('open');
+            overlay.classList.toggle('open');
+            btn.innerHTML = sidebar.classList.contains('open') ? '&#10005;' : '&#9776;';
+        }
+        document.addEventListener('click', function(e) {
+            var sidebar = document.getElementById('sidebar');
+            var toggle = document.querySelector('.menu-toggle');
+            if (window.innerWidth <= 768 && !sidebar.contains(e.target) && !toggle.contains(e.target)) {
+                sidebar.classList.remove('open');
+                document.querySelector('.sidebar-overlay').classList.remove('open');
+            }
+        });
+    </script>
 </body>
 </html>

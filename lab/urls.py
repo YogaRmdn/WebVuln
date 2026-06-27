@@ -39,4 +39,8 @@ urlpatterns = [
     path('debug/', views.debug_info, name='debug_info'),
     path('robots.txt', views.robots, name='robots'),
     path('.well-known/security.txt', views.security_txt, name='security_txt'),
+
+    # 403 Forbidden Bypass
+    path('protected/', views.protected_index, name='protected_index'),
+    path('protected/<int:doc_id>/', views.protected_document, name='protected_document'),
 ]

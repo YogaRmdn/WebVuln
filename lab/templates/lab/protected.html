@@ -1,0 +1,42 @@
+{% extends 'lab/base.html' %}
+{% block title %}Protected Area{% endblock %}
+{% block content %}
+<h1>Protected Admin Panel</h1>
+<p class="section-desc">This area is restricted to administrators. Normal users receive a <strong>403 Forbidden</strong> response. Find a way to bypass the access control.</p>
+
+<div class="card">
+    <h3>Classified Documents</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Category</th>
+                <th>Required Role</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for doc in docs %}
+            <tr>
+                <td>{{ doc.title }}</td>
+                <td><span class="badge">{{ doc.category }}</span></td>
+                <td>{{ doc.required_role }}</td>
+                <td><a href="{% url 'protected_document' doc.id %}" class="btn" style="padding:0.3rem 0.8rem;font-size:0.8rem">View</a></td>
+            </tr>
+        {% empty %}
+            <tr><td colspan="4" class="empty-state">No documents available.</td></tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<div class="card">
+    <h3>Bypass Techniques</h3>
+    <p>Try these methods to bypass the 403 restriction:</p>
+    <ul style="margin-top:1rem">
+        <li><strong>Headers:</strong> Send <code>X-Original-URL</code> or <code>X-Rewrite-URL</code></li>
+        <li><strong>Method:</strong> Use <code>POST</code>, <code>PUT</code>, <code>PATCH</code>, or <code>DELETE</code> instead of GET</li>
+        <li><strong>Path:</strong> Append <code>..;/</code> to the URL path</li>
+    </ul>
+</div>
+{% endblock %}

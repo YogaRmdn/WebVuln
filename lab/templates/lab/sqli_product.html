@@ -15,12 +15,14 @@
         </div>
     </form>
     {% if products %}
+    <div class="table-wrapper">
     <table>
         <tr><th>ID</th><th>Name</th><th>Description</th><th>Price</th><th>Category</th></tr>
         {% for p in products %}
         <tr><td>{{ p.0 }}</td><td>{{ p.1 }}</td><td>{{ p.2 }}</td><td>{{ p.3 }}</td><td>{{ p.4 }}</td></tr>
         {% endfor %}
     </table>
+    </div>
     {% endif %}
 </div>
 {% endblock %}

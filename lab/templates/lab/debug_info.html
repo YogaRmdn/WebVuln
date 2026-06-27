@@ -5,10 +5,12 @@
 <div class="card">
     <div class="vuln-tag">Vulnerability: Sensitive Information Exposure</div>
     <p class="section-desc">This endpoint exposes sensitive configuration details.</p>
+    <div class="table-wrapper">
     <table>
         {% for key, value in info.items %}
         <tr><th>{{ key }}</th><td><code>{{ value }}</code></td></tr>
         {% endfor %}
     </table>
+    </div>
 </div>
 {% endblock %}

@@ -11,7 +11,7 @@ from django.contrib.auth.models import User
 from django.db import connection
 from django.views.decorators.csrf import csrf_exempt
 
-from .models import BlogPost, Comment, Product, UploadedFile
+from .models import BlogPost, Comment, Product, UploadedFile, ProtectedDocument
 from .forms import CommentForm, SearchForm, UploadForm, FeedbackForm, TransferForm
 
 
@@ -245,3 +245,39 @@ def robots(request):
 def security_txt(request):
     content = "Contact: mailto:admin@example.com\nExpires: 2026-12-31\n"
     return HttpResponse(content, content_type='text/plain')
+
+
+# -- 403 Forbidden Bypass --
+
+def protected_index(request):
+    bypassed = _check_403_bypass(request)
+    if not bypassed:
+        return HttpResponse('403 Forbidden — Access Denied', status=403)
+
+    docs = ProtectedDocument.objects.all()
+    categories = ProtectedDocument.objects.values_list('category', flat=True).distinct()
+    return render(request, 'lab/protected.html', {
+        'docs': docs,
+        'categories': categories,
+    })
+
+
+def protected_document(request, doc_id):
+    bypassed = _check_403_bypass(request)
+    if not bypassed:
+        return HttpResponse('403 Forbidden — Access Denied', status=403)
+
+    doc = get_object_or_404(ProtectedDocument, id=doc_id)
+    return render(request, 'lab/protected_detail.html', {'doc': doc})
+
+
+def _check_403_bypass(request):
+    if request.META.get('HTTP_X_ORIGINAL_URL'):
+        return True
+    if request.META.get('HTTP_X_REWRITE_URL'):
+        return True
+    if request.method in ('POST', 'PUT', 'PATCH', 'DELETE'):
+        return True
+    if '..;/' in request.path:
+        return True
+    return False

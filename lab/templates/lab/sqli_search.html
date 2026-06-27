@@ -18,12 +18,14 @@
     <div class="alert">Error: {{ error }}</div>
     {% endif %}
     {% if results %}
+    <div class="table-wrapper">
     <table>
         <tr><th>ID</th><th>Username</th><th>Email</th></tr>
         {% for row in results %}
         <tr><td>{{ row.0 }}</td><td>{{ row.1 }}</td><td>{{ row.2 }}</td></tr>
         {% endfor %}
     </table>
+    </div>
     {% endif %}
 </div>
 <div class="card">

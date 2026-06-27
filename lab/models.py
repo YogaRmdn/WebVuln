@@ -36,3 +36,14 @@ class UploadedFile(models.Model):
     file = models.FileField(upload_to='uploads/')
     uploaded_at = models.DateTimeField(auto_now_add=True)
     description = models.CharField(max_length=255, blank=True)
+
+
+class ProtectedDocument(models.Model):
+    title = models.CharField(max_length=200)
+    content = models.TextField()
+    category = models.CharField(max_length=100, default='general')
+    required_role = models.CharField(max_length=100, default='admin')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.title
